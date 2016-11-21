@@ -1,0 +1,208 @@
+
+<nav class="navbar navbar-static-top navbar-default">
+  <p class="navbar-brand">CZ Bike storage</p>
+  <ul class="nav navbar-nav">
+    <!--<li id="showBikes" class="nav-item {{bikeview ? 'active' : ''}}">
+      <a class="nav-link" on-click="showBikes" href="#">Bikes<span class="sr-only">(current)</span></a>
+    </li>-->
+    <li id="showTours" class="nav-item {{tourview ? 'active' : ''}}">
+      <a class="nav-link" on-click="{{tourview ? '' : 'showTours'}}" href="#">Tours</a>
+    </li>
+    <li id="bikes" class="nav-item {{!tourview ? 'active' : ''}}">
+      <a class="nav-link" on-click="{{tourview ? 'showBikes' : ''}}" href="#">Bikes</a>
+    </li>
+  </ul>
+</nav>
+
+<div class="row">
+
+  {{#if tourview}}
+    <div class="col-md-4 col-md-offset-1">
+      <TourSelect></TourSelect>
+
+      {{#if tourdetail.guests.length !== 0}}
+        <h1>Guests</h1>
+        <table class="table table-hover table-striped  animated fadeInUp">
+          <thead>
+            <th class="animated"><i class="fa fa-calendar-o" aria-hidden="true"></i> code</th>
+            <th class="animated"><i class="fa fa-user" aria-hidden="true"></i> name</th>
+            <th class="animated"><i class="fa fa-venus-mars" aria-hidden="true"></i></th>
+            <th class="animated"><i class="fa fa-arrows-v" aria-hidden="true"></i></th>
+            <th class="animated"><i class="fa fa-bicycle" aria-hidden="true"></i> nr.</th>
+          </thead>
+          <tfoot>
+            <tr >
+              {{#if tourdetail.addguestform}}
+              <td colspan="5" class="text-right">
+                <form class="form-horizontal" intro="animate:bounceIn">
+                  <myedit myvalue={{tourdetail.addGuestForm.name}} myplaceholder='Guest name' isok={{tourdetail.addGuestForm.name != ''}}></myedit>
+                  <myedit myvalue={{tourdetail.addGuestForm.gender}} myplaceholder='M or F' isok={{tourdetail.addGuestForm.check.gender}} iserror={{tourdetail.addGuestForm.gender!='' && tourdetail.addGuestForm.check.gender==0}}></myedit>
+                  <myedit myvalue={{tourdetail.addGuestForm.hfoot}} myplaceholder='4-6' isok={{tourdetail.addGuestForm.check.hfoot}} iserror={{tourdetail.addGuestForm.hfoot!='' && tourdetail.addGuestForm.check.hfoot==0}}></myedit>
+                  <myedit myvalue={{tourdetail.addGuestForm.hinch}} myplaceholder='0-12' isok={{tourdetail.addGuestForm.check.hinch}} iserror={{tourdetail.addGuestForm.hinch!='' && tourdetail.addGuestForm.check.hinch==0}}></myedit>
+                  {{#if tourdetail.addGuestForm.name!='' && tourdetail.addGuestForm.check.gender && tourdetail.addGuestForm.check.hfoot && tourdetail.addGuestForm.check.hinch}}
+                  <a href=# on-click="addGuest" class="btn btn-primary">Submit</a>
+                  {{else}}
+                  <a href=# on-click="addGuest" class="btn btn-primary not-active" disabled="disabled">Submit</a>
+                  {{/if}}
+                </form>
+              </td>
+              {{else}}
+              <td colspan="5" class="text-right">
+                <a on-click="displayAddGuestForm" href="#"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add guest</a>
+              <td>
+              {{/if}}
+            </tr>
+          </tfoot>
+          <tbody>
+            {{#if tourdetail.code !== 'Select'}}
+              {{#each tourdetail.guests}}
+              <tr class="showpointer" on-click="assignBike"><td>CZB{{tourcode}}</td><td>{{name}}</td><td>{{gender}}</td><td>{{hfoot}}"{{hinch}}</td><td>{{# bikenr === 0}}<i class="fa fa-question-circle" aria-hidden="true"></i>{{/}}{{# bikenr !== 0}}{{bikenr}} <a href="#" on-click="unassignBike"><i class="fa fa-times removebutton" aria-hidden="true"></i></a>{{/}}</td></tr>
+              {{/each}}
+            {{/if}}
+          </tbody>
+        </table>
+      {{else}}
+        {{# tourdetail.code!='Select' }}
+          <div class="alert alert-danger" role="alert">No guests on this trip!</div>
+          {{#if tourdetail.addguestform}}
+              <form class="form-horizontal">
+                <input type="text" class="form-control" placeholder="Guest name" value='{{tourdetail.addGuestForm.name}}'>
+                <input type="text" class="form-control" placeholder="M" value='{{tourdetail.addGuestForm.gender}}'>
+                <input type="text" class="form-control" placeholder="5" value='{{tourdetail.addGuestForm.hfoot}}'>
+                <input type="text" class="form-control" placeholder="12" value='{{tourdetail.addGuestForm.hinch}}'>
+                <a href=# on-click="addGuest" class="btn btn-primary">Submit</a>
+              </form>
+          {{else}}
+              <a on-click="displayAddGuestForm" href="#"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add guest</a>
+          {{/if}}
+        {{/}}
+      {{/if}}
+  </div>
+
+  {{#if view.bikeAssignment}}
+
+    <div class="col-md-4 col-md-offset-1" intro="animate:bounceInRight">
+      <h4 class="gray">Pick a bike for <span class="label label-default">{{bikeAssignment.name}}</span></h4>
+      <div class="btn-group btn-group-sm" role="group" aria-label="...">
+        <button type="button" class="btn btn-primary {{bikeAssignment.fitMode === 'best' ? 'active' : ''}}" on-click='set("bikeAssignment.fitMode","best")'>Best fit</button>
+        <button type="button" class="btn btn-primary {{bikeAssignment.fitMode === 'good' ? 'active' : ''}}" on-click='set("bikeAssignment.fitMode","good")'>Good fit</button>
+        <button type="button" class="btn btn-primary {{bikeAssignment.fitMode === 'all' ? 'active' : ''}}" on-click='set("bikeAssignment.fitMode","all")'>All sizes</button>
+      </div>
+      <div class="btn-group btn-group-sm" role="group" aria-label="...">
+        <button type="button" class="btn btn-primary {{bikeAssignment.assignMode === 'unassigned' ? 'active' : ''}}" on-click='set("bikeAssignment.assignMode","unassigned")'>Unassigned</button>
+        <button type="button" class="btn btn-primary {{bikeAssignment.assignMode === 'all' ? 'active' : ''}}" on-click='set("bikeAssignment.assignMode","all")'>All</button>
+      </div>
+      <table class="table table-hover table-striped">
+        <thead>
+          <th>ID</th>
+          <th>Type</th>
+          <th>Tours</th>
+          <th></th>
+        </thead>
+        <tbody>
+          {{#each filterBikes(bikes)}}
+          <tr {{isOnOtherTour(nr,bikeAssignment.tourcode) ? 'class="danger"': isAssigned(nr,bikeAssignment.name) ? 'class="success"' :'class="showpointer"'}} on-click="{{#if canBeAssigned(nr,bikeAssignment.tourcode,bikeAssignment.name)}}assignBikeSubmit{{/if}}">
+            <td>{{nr}}</td><td>{{size}}</td>
+            <td>{{tours}}
+                {{# tours!==0 && bikeAssignment.assignMode === 'all'}}
+                ({{#each tourcodes:num}}
+                  {{num !== 0 ? ',' : ''}}
+                  CZB{{.}}
+                {{/each}})
+              {{/}}
+            </td>
+            <td>
+              {{isAssigned(nr,bikeAssignment.name) ? 'assigned' : ''}}, {{isOnOtherTour(nr,bikeAssignment.tourcode) ? 'on other tour' : ''}}
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+  {{/if}}
+  {{else}}
+  <div class="col-md-4 col-md-offset-1" intro="animate:slideInDown">
+    <div id="visualization"></div>
+  </div>
+  <div class="col-md-4 col-md-offset-1" intro="animate:slideInUp">
+    <h1>Bikes in storage</h1>
+    <table class="table table-hover table-striped">
+      <thead>
+        <th>ID</th>
+        <th>Type</th>
+        <th>Tours</th>
+        <th></th>
+      </thead>
+      <tbody>
+        {{#each bikes:i}}
+        <tr class="showpointer" on-click="showBikeBox">
+          <td>{{nr}}</td><td>{{size}}</td>
+          <td>{{tourcodes.length}}
+              ({{#each tourcodes:num}}
+                {{num !== 0 ? ',' : ''}}
+                CZB{{.}}
+              {{/each}})
+          </td>
+          <td>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  {{#bikebox}}
+  <div class="bikebox animated fadeIn" on-click="closeBikeBox" >
+    <a href="#" on-click="closeBikeBox" class="close"><i class="fa fa-times" aria-hidden="true"></i></a>
+    <div>
+        {{#bikes[boxdetailindex]}}
+          <h1>{{nr}} <i class="fa fa-bicycle" aria-hidden="true"></i></h1>
+          <hr>
+          Here will be bike information, kilometers, repair history
+        {{/}}
+      <div class=bottom><a href=# on-click="closeBikeBox" class="btn btn-primary">Close</a></div>
+    </div>
+  </div>
+  {{/}} {{! bikebox}}
+
+  {{/if}} {{! if tourview}}
+
+</div>
+
+
+<!-- Button trigger modal -->
+<!--
+<button type="button" class="btn btn-primary btn-lg" on-click="showBikeDetail:1546">
+  Launch from js
+</button>
+-->
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Bike detail {{bikeDetail[0].nr}}</h4>
+      </div>
+      <div class="modal-body">
+        ...
+        <hr>
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <hr>
+
+  <footer>
+    <p>&nbsp;&copy; 2016</p>
+  </footer>

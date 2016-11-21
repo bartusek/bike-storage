@@ -1,0 +1,10 @@
+<div class="myedit {{iserror ? 'has-error has-feedback' : isok ? 'has-success has-feedback': ''}}">
+  <input type="text" class="form-control" placeholder='{{myplaceholder}}' value='{{myvalue}}'>
+  {{#if iserror}}
+    <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+    <span id="inputError2Status" class="sr-only">(error)</span>
+  {{elseif isok}}
+    <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+    <span id="inputGroupSuccess1Status" class="sr-only">(success)</span>
+  {{/if}}
+</div>

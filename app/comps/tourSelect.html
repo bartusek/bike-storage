@@ -1,0 +1,32 @@
+<nav class="navbar navbar-default navbar-static animated fadeInDown" style="z-index:1" >
+  <div class="container-fluid">
+    <div class="navbar-brand">
+      Tours
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="dropdown"> <a href="#" class="dropdown-toggle" id="drop1" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> {{tourdetail.code === 'Select' ? '' : 'CZB'}}{{tourdetail.code}} <span class="caret"></span> </a>
+        <ul class="dropdown-menu" aria-labelledby="drop1">
+          {{#each tours}}
+            <li><a on-click="FireTourSelected" href="#"><i class="fa fa-calendar-o" aria-hidden="true"></i> CZB{{code}}</a></li>
+          {{/each}}
+          <!--<li role="separator" class="divider"></li> -->
+        </ul>
+      </li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      {{#if view.addTour }}
+      <form class="form-inline add-tour-form animated bounceIn">
+        <div class="form-group">
+          <div class="input-group add-tour-input-group">
+            <div class="input-group-addon">CZB</div>
+            <input type="text" class="form-control" id="exampleInputAmount" placeholder="Code" value='{{addTour.code}}'>
+          </div>
+        </div>
+        <a on-click="addTour" {{addTour.correct ? 'class="btn btn-primary" ' : 'disabled="disabled" class="btn btn-primary not-active"' }}>Add</a>
+        </form>
+      {{else}}
+        <li > <a on-click="displayAddTour" href="#"><i class="fa fa-calendar-plus-o" aria-hidden="true"></i></a></li>
+      {{/if}}
+    </ul>
+  </div>
+</nav>

@@ -1,0 +1,38 @@
+{
+  "name": "bikes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "start": "webpack-dev-server"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.14.0",
+    "babel-loader": "^6.2.5",
+    "babel-preset-es2015": "^6.14.0",
+    "clean-webpack-plugin": "^0.1.10",
+    "css-loader": "^0.25.0",
+    "html-webpack-plugin": "^2.22.0",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.2",
+    "webpack-dev-server": "^1.16.1",
+    "webpack-merge": "^0.14.1",
+    "webpack-validator": "^2.2.7"
+  },
+  "dependencies": {
+    "animate.css": "^3.5.2",
+    "hash-match": "^1.0.2",
+    "json-loader": "^0.5.4",
+    "ractive": "^0.7.3",
+    "ractive-animatecss": "^0.1.0",
+    "ractive-loader": "^0.5.6",
+    "url-loader": "^0.5.7",
+    "vis": "^4.16.1",
+    "wayfarer": "^6.2.1"
+  }
+}
